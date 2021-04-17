@@ -1,0 +1,14 @@
+/* 2020/11/09 */
+.mini-post {
+    width: 40px;
+}
+
+.card
+{
+    color: black;
+}
+
+.card:hover
+{
+    text-decoration: none;
+}

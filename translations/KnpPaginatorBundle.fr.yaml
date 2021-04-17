@@ -1,0 +1,4 @@
+framework:
+  label_previous: "Précédent"
+  label_next: "Suivant"
+  default_locale: fr

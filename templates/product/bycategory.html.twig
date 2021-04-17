@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category }}{% endblock %}
+
+{% block body %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <h1 class="row justify-content-center p-2 m-2">
+                Ajouter un produit
+                <span class="p-2"></span>
+                <a href="{{ path('newProduct') }}">
+                    <i class="bi bi-plus-circle-fill"></i>
+                </a>
+            </h1>
+            <div class="row"></div>
+        {% endif %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for product in pagination %}
+                <div class="col">
+                    <a href="{{ path( "category-single", {slug:product.slug, cat:product.category.name|lower}) }}">
+                        <div class="card m-1">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src="img/{{ product.image }}"  class="card-img" alt="...">
+                                </div>
+
+                                <div class="col-md-8">
+                                    <div class="card-body justify-content-center">
+                                        <h2 class="card-title">{{ product.name }}</h2>
+                                        <div>
+                                            {{ product.description|slice(0, 50) }}
+                                            {% if product.description|length > 50 %}
+                                                (<i class="bi bi-three-dots"></i>)
+                                            {% endif %}
+                                        </div>
+                                        {% if product.discount !=0 %}
+                                            <h3>- {{ product.discount }} %</h3>
+                                        {% endif %}
+
+                                        <p>
+                                        <h1>
+                                            <b>{{ product.price - product.price * (product.discount/100) }} €</b>
+                                            {% if product.discount !=0 %}
+                                                <sup><i style="text-decoration: line-through">{{ product.price }} €</i></sup>
+                                            {% endif %}
+                                        </h1>
+                                        </p>
+
+                                        <p class="card-text"><small class="text-muted">{{ product.dateAdd|date("d/m/Y H:i:s") }}</small></p>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+        {% endfor %}
+    </div>
+
+    {% if pagination.getTotalItemCount > 10 %}
+    <span class="row">
+        <span class="col-md-5"></span>
+        <div class="navigation p-md-5">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </span>
+    {% endif %}
+{% endblock %}

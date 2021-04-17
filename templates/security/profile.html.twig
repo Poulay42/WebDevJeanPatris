@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{ user.username }}
+{% endblock %}
+
+{% block body %}
+    <main class="container p-md-5">
+        <section class="row">
+            <div class="col-md-4">
+                    <img src="{{ asset("img/users/" ~ user.image) }}" alt="" style="max-width: 100%">
+            </div>
+            <div class="col-md-8">
+                <h2 class="my-4">{{ user.username }}</h2>
+                <div class="row">
+                    <div class="col-10">
+                        {{ form_start(form) }}
+                            {{ form_row(form.password) }}
+                            {{ form_row(form.Email) }}
+                            {{ form_row(form.imageFile) }}
+                        {{ form_widget(form) }}
+                    </div>
+                </div>
+                <button type="submit" class="btn-outline-primary">Modifier le profil</button>
+                {{ form_end(form) }}
+            </div>
+        </section>
+    </main>
+{% endblock %}

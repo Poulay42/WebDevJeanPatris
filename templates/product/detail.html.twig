@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-2 m-5">
+            <img src="{{ asset('img/' ~ product.image) }}" style="max-width: 100%" alt=""/>
+        </div>
+        <div class="col-md-8 m-5 border p-5 border-dark">
+            <div class="card-title">
+                <h3>
+                    <b>{{ product.name }}</b>
+                </h3>
+            </div>
+            <div class="card-body">
+                {{ product.description }}
+                {% if product.description|length < 50 %}
+                    <span><i class="bi bi-dot"></i><i class="bi bi-dot"></i><i class="bi bi-dot"></i></span>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                {% if product.discount !=0 %}
+                <sup><i style="text-decoration: line-through">{{ product.price }} €</i></sup>
+                <h1><b>{{ product.price - product.price * (product.discount/100) }} €</b></h1>
+            </div>
+            <div class="card-footer">
+                - {{ product.discount }} %
+            </div>
+            {% endif %}
+            <div class="card-footer">
+                {{ product.dateAdd|date("d/m/Y") }}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        {% if app.user %}
+            <div class="col-md-8 offset-2">
+                <h4>Nouveau commentaire</h4>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn-outline-primary">Commenter</button>
+                {{ form_end(form) }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        {% for commentary in commentaries %}
+                <div class="col-md-8 m-5 border">
+                    <div class="row p-2">
+                        <div class="col-md-4">
+                            <h4>{{ commentary.User.username }}</h4><br>
+                            <div class="text-muted">
+                                <small>{{ commentary.createdat|date("d/m/Y H:i:s") }}</small>
+                            </div><br>
+                            <img src="{{ asset('img/users/' ~ commentary.User.image) }}" alt="" style="max-width: inherit"/><br>
+                        </div>
+                        <div class="col-md-6 p-2">
+                            {{ commentary.Text|raw }}
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+    </div>
+
+    <span class="row">
+        <span class="col-md-5"></span>
+        <div class="navigation p-md-5">
+            {{ knp_pagination_render(commentaries) }}
+        </div>
+    </span>
+{% endblock %}

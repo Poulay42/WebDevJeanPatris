@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+    <main class="container p-md-5">
+        <section class="row">
+            <div class="col-md-3 border">
+                <h1>Catégories</h1>
+                {% for cat in categories %}
+                    <a class="dropdown-item"  href="{{ path('categoryRoute', {cat:cat.name|lower}) }}" >{{ cat.name }}s</a>
+                {% endfor %}
+                <li class="dropdown-divider"></li>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn-outline-primary">Nouvelle catégorie</button>
+                {{ form_end(form) }}
+            </div>
+
+            <span class="col-md-1"></span>
+
+            <div class="col-md-5">
+                <h1>Produits</h1>
+                {% for prod in pagination %}
+                    <a href="{{ path("category-single", {slug:prod.slug, cat:prod.category.name|lower}) }}" style="color: black">
+                        <div class="row">
+                            <span class="col-md-4">
+                                <img src="{{ asset('img/' ~ prod.image) }}" alt="" style="max-width: inherit">
+                            </span>
+                            <span class="cold-md-2"></span>
+                            <span class="col-md-6">
+                                <p>{{ prod.name }}</p>
+                            </span>
+                        </div>
+                    </a>
+                    <li class="dropdown-divider"></li>
+                {% endfor %}
+                <div class="navigation p-md-5">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

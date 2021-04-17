@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name ="viewport" content ="width=device width, initial scale=1">
+
+    {% block stylesheets %}
+        <link rel ="stylesheet" href ="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+        <link rel ="stylesheet" href ="{{ asset('css/main.css')}}">
+    {% endblock %}
+
+    <title>{% block title %}Tempest{% endblock %}</title>
+    <div class="card text-center">
+        <div class="card-body">
+            <img src="{{ asset('img/header.png') }} " style="max-width: 100%;" />
+        </div>
+    </div>
+</head>
+
+<body>
+{% block nav %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ path('product') }}">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('sales') }}">Soldes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('all') }}">Nos produits</a>
+                </li>
+                <li class="nav-item dropdown">
+                    {% if category is defined %}
+                        <a class="nav-link dropdown-toggle"  href="{{ path('categoryRoute', {cat:category|lower}) }}"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ category|capitalize }}s
+                        </a>
+                    {% else %}
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Nos catégories
+                        </a>
+                    {% endif %}
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for cat in categories %}
+                                <a class="dropdown-item"  href="{{ path('categoryRoute', {cat:cat.name|lower}) }}" >{{ cat.name }}s</a>
+                        {% endfor %}
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('contact') }}" class="nav-link">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('conditions') }}" class="nav-link">Conditions</a>
+                </li>
+            </ul>
+        </div>
+        <form class="form-inline my-2 my-lg-0">
+            {% if not app.user %}
+                <a href=" {{ path('login') }}" class="btn btn-primary">S'identifier</a>&nbsp;&nbsp;
+                <a href="{{ path('registration') }}" class="btn btn-primary">S'enregistrer</a>
+            {% else %}
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ asset('img/users/' ~ app.user.image() ) }}" alt="" style="max-height: 5em;"/> {{ app.user.username() }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('profile', {slug:app.user.slug}) }}">Mon profil</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ path('dashboard') }}">Dashboard</a>
+                            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                <a class="dropdown-item" href="{{ path('dashboard') }}">Gestion des rôles (WIP)</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <span style="margin-right: 2em"> </span>
+                <a href=" {{ path('logout') }}" class="btn btn-primary">Se déconnecter</a>
+            {% endif %}
+        </form>
+    </nav>
+{% endblock %}
+
+
+{% block body %}
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src=" {{ asset('/js/jquery.min.js') }}"></script>
+    <script src=" {{ asset('/js/bootstrap.bundle.min.js') }}"></script>
+    <script src=" {{ asset('/js/main.js') }} "></script>
+{% endblock %}
+</body>
+</html>
